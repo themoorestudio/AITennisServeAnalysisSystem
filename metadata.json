@@ -1,0 +1,7 @@
+{
+  "name": "AI Tennis Serve Coach",
+  "description": "Upload a video of your tennis serve to receive a detailed analysis of your mechanics and personalized drills for improvement from an AI coach.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
