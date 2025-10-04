@@ -32,7 +32,6 @@ Instructions:
 5.  **Key Takeaway:** For each component, provide a single, actionable key takeaway.
 6.  **Overall Summary:** Write a brief, encouraging overall summary of the serve.
 7.  **Recommend Drills:** Based on the analysis, recommend 3 specific, actionable drills.
-8.  **Generate Annotated Image:** For each mechanical component, identify a key frame (ideally one of the provided key moments). Draw clear diagrams (lines, angles, circles) to visually highlight the area for improvement. Return this annotated image as a base64 encoded PNG string.
 
 Generate the analysis in the structured JSON format as defined in the schema. If pose or key moment data is not provided, perform a qualitative analysis based on the video alone, but you can still add your own estimated timestamps.
 `;
@@ -70,10 +69,6 @@ export const analyzeServe = async (videoFile: File, poseData: PoseData | null, k
             keyTakeaway: {
               type: Type.STRING,
               description: "A single, actionable tip for this component."
-            },
-            annotatedImage: {
-              type: Type.STRING,
-              description: "A base64 encoded PNG image. This is a key frame from the video with diagrams drawn on it to visually illustrate the critique."
             }
           },
           required: ["component", "rating", "critique", "keyTakeaway"]

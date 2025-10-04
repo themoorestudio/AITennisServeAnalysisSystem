@@ -16,6 +16,39 @@ const getYouTubeId = (url: string): string | null => {
   return (match && match[2].length === 11) ? match[2] : null;
 };
 
+const generateThumbnail = (videoFile: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const video = document.createElement('video');
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    
+    video.addEventListener('loadeddata', () => {
+      // Seek to 1 second or halfway if video is shorter
+      video.currentTime = Math.min(1, video.duration / 2);
+    });
+
+    video.addEventListener('seeked', () => {
+      if (!context) {
+        return reject(new Error('Canvas context not available'));
+      }
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+      resolve(canvas.toDataURL('image/jpeg', 0.8)); // 80% quality JPEG
+      URL.revokeObjectURL(video.src);
+    });
+    
+    video.addEventListener('error', () => {
+        reject(new Error('Failed to load video for thumbnail generation.'));
+        URL.revokeObjectURL(video.src);
+    });
+    
+    video.preload = 'metadata';
+    video.src = URL.createObjectURL(videoFile);
+  });
+};
+
+
 const App: React.FC = () => {
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [youtubeUrl, setYoutubeUrl] = useState<string>('');
@@ -134,11 +167,13 @@ const App: React.FC = () => {
       return;
     }
     try {
+      const thumbnail = await generateThumbnail(videoFile);
       await db.serves.add({
         videoBlob: videoFile,
         analysisReport: analysisResult,
         poseData: poseData,
         date: new Date(),
+        thumbnail: thumbnail,
       });
       alert("Serve saved successfully!");
     } catch (err) {

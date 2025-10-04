@@ -10,7 +10,6 @@ export interface MechanicAnalysis {
   rating: number;
   critique: string;
   keyTakeaway: string;
-  annotatedImage?: string; // base64 encoded image string
 }
 
 export interface AnalysisReportData {
@@ -37,6 +36,7 @@ export interface ServeHistoryItem {
   analysisReport: AnalysisReportData;
   poseData: PoseData;
   date: Date;
+  thumbnail?: string; // Base64 encoded image for preview
 }
 
 export interface ChatMessage {

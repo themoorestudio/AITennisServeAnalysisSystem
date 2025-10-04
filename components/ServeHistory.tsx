@@ -41,7 +41,7 @@ const ServeHistory: React.FC<ServeHistoryProps> = ({ onClose, onLoadServe }) => 
       role="dialog"
     >
       <div
-        className="relative w-full max-w-2xl max-h-[90vh] bg-gray-900 border border-gray-700 rounded-xl flex flex-col"
+        className="relative w-full max-w-3xl max-h-[90vh] bg-gray-900 border border-gray-700 rounded-xl flex flex-col"
         onClick={e => e.stopPropagation()}
       >
         <header className="flex justify-between items-center p-4 border-b border-gray-700 flex-shrink-0">
@@ -66,18 +66,25 @@ const ServeHistory: React.FC<ServeHistoryProps> = ({ onClose, onLoadServe }) => 
           <div className="space-y-4">
             {serves?.map(serve => (
               <div key={serve.id} className="bg-gray-800/70 p-4 rounded-lg flex items-center justify-between gap-4 hover:bg-gray-700/70 transition-colors">
-                <div className="flex items-center gap-4 flex-grow">
-                  <div className="text-center flex-shrink-0 w-16">
-                      <div className="text-2xl font-bold text-green-400">{getAverageRating(serve)}</div>
-                      <div className="text-xs text-gray-400">Avg. Score</div>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-white">
+                <div className="flex items-center gap-4 flex-grow overflow-hidden">
+                  {serve.thumbnail ? (
+                    <img src={serve.thumbnail} alt="Serve thumbnail" className="w-28 h-16 object-cover rounded-md bg-gray-700 flex-shrink-0" />
+                  ) : (
+                    <div className="w-28 h-16 flex items-center justify-center bg-gray-700 rounded-md flex-shrink-0">
+                      <TennisBallIcon className="w-8 h-8 text-gray-500" />
+                    </div>
+                  )}
+                  <div className="flex-grow overflow-hidden">
+                    <p className="font-semibold text-white truncate" title={`Serve from ${serve.date.toLocaleString()}`}>
                       Serve from {serve.date.toLocaleDateString()}
                     </p>
                     <p className="text-sm text-gray-400">
                       {serve.date.toLocaleTimeString()}
                     </p>
+                    <p className="text-sm text-gray-300 flex items-center gap-2 mt-1">
+                      <span className="font-bold text-lg text-green-400">{getAverageRating(serve)}</span>
+                      <span className="text-gray-400">Avg. Score</span>
+                  </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">

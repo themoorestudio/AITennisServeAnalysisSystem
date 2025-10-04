@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import type { AnalysisReportData, ChatMessage, PoseData } from '../types';
 import { drawSinglePose } from '../services/poseService';
 import DrillCard from './DrillCard';
-import ImageModal from './ImageModal';
 import { CheckCircleIcon } from './icons/CheckCircleIcon';
 import { SaveIcon } from './icons/SaveIcon';
 import { SendIcon } from './icons/SendIcon';
@@ -29,7 +28,6 @@ const AnalysisReport: React.FC<AnalysisReportProps> = ({
   isChatLoading,
   onSendChatMessage
 }) => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isSaved, setIsSaved] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -162,19 +160,8 @@ const AnalysisReport: React.FC<AnalysisReportProps> = ({
             <h3 className="text-xl font-bold text-white mb-3">Mechanics Breakdown</h3>
             <div className="space-y-6">
               {report.mechanics.map((mechanic, index) => (
-                <div key={index} className="bg-gray-900/60 p-5 rounded-lg border border-gray-700 flex flex-col md:flex-row gap-6">
-                  {mechanic.annotatedImage && (
-                    <div className="flex-shrink-0 w-full md:w-48">
-                      <img
-                        src={`data:image/png;base64,${mechanic.annotatedImage}`}
-                        alt={`Annotation for ${mechanic.component}`}
-                        className="w-full h-auto rounded-md object-cover cursor-pointer hover:opacity-80 transition-opacity"
-                        onClick={() => setSelectedImage(`data:image/png;base64,${mechanic.annotatedImage}`)}
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
-                  <div className="flex-grow">
+                <div key={index} className="bg-gray-900/60 p-5 rounded-lg border border-gray-700">
+                  <div>
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="text-lg font-bold text-green-300">{mechanic.component}</h4>
                       <div className="flex items-center gap-2 text-white font-bold text-lg flex-shrink-0 ml-4">
@@ -279,10 +266,6 @@ const AnalysisReport: React.FC<AnalysisReportProps> = ({
           </div>
         </div>
       </div>
-
-      {selectedImage && (
-        <ImageModal imageUrl={selectedImage} onClose={() => setSelectedImage(null)} />
-      )}
 
       <style>{`
         @keyframes fade-in {
